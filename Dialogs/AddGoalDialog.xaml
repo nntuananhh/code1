@@ -1,0 +1,85 @@
+<Window x:Class="WpfApp3.Dialogs.AddGoalDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Thêm mục tiêu" Height="495" Width="500"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        FontFamily="{DynamicResource MaterialDesignFont}">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,24">
+            <TextBlock Text="Thêm mục tiêu mới" FontSize="24" FontWeight="Bold" 
+                     Foreground="{DynamicResource MaterialDesignBody}"/>
+            <TextBlock Text="Tạo mục tiêu tài chính mới" FontSize="14" 
+                     Foreground="{DynamicResource MaterialDesignBodyLight}" Margin="0,8,0,0"/>
+        </StackPanel>
+
+        <!-- Form -->
+        <StackPanel Grid.Row="1">
+            <!-- Goal Name -->
+            <StackPanel Margin="0,0,0,16">
+                <TextBlock Text="Tên mục tiêu" FontSize="14" FontWeight="Medium" 
+                          Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,0,8"/>
+                <TextBox x:Name="GoalNameTextBox" 
+                        materialDesign:HintAssist.Hint="Nhập tên mục tiêu"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+            </StackPanel>
+
+
+            <!-- Target Amount -->
+            <StackPanel Margin="0,0,0,16">
+                <TextBlock Text="Số tiền mục tiêu" FontSize="14" FontWeight="Medium" 
+                          Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,0,8"/>
+                <TextBox x:Name="TargetAmountTextBox" 
+                        materialDesign:HintAssist.Hint="Nhập số tiền mục tiêu"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        PreviewTextInput="AmountTextBox_PreviewTextInput"/>
+            </StackPanel>
+
+            <!-- Current Amount -->
+            <StackPanel Margin="0,0,0,16">
+                <TextBlock Text="Số tiền hiện tại" FontSize="14" FontWeight="Medium" 
+                          Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,0,8"/>
+                <TextBox x:Name="CurrentAmountTextBox" 
+                        materialDesign:HintAssist.Hint="Nhập số tiền đã có (mặc định: 0)"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Text="0"
+                        PreviewTextInput="AmountTextBox_PreviewTextInput"/>
+            </StackPanel>
+
+            <!-- Target Date -->
+            <StackPanel Margin="0,0,0,16">
+                <TextBlock Text="Ngày mục tiêu" FontSize="14" FontWeight="Medium" 
+                          Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,0,8"/>
+                <DatePicker x:Name="TargetDatePicker" 
+                           materialDesign:HintAssist.Hint="Chọn ngày hoàn thành mục tiêu"
+                           Style="{StaticResource MaterialDesignFloatingHintDatePicker}"/>
+            </StackPanel>
+
+        </StackPanel>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,0">
+            <Button x:Name="CancelButton" Content="Hủy" 
+                    Style="{StaticResource MaterialDesignFlatButton}"
+                    Margin="0,0,8,0" Click="CancelButton_Click"/>
+            <Button x:Name="SaveButton" Content="Lưu" 
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Background="{DynamicResource PrimaryHueMidBrush}"
+                    Foreground="Black" Click="SaveButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

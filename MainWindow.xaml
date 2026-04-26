@@ -1,0 +1,322 @@
+<Window x:Class="WpfApp3.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Quản Lý Chi Tiêu" Height="800" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        FontFamily="{DynamicResource MaterialDesignFont}">
+
+    <Window.Resources>
+        <!-- Sidebar Button Style -->
+        <Style x:Key="SidebarButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+            <Setter Property="Height" Value="46"/>
+            <Setter Property="Margin" Value="12,6"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="24,0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="8" 
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#F5F5F5"/>
+                                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#E0E0E0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Active Sidebar Button Style -->
+        <Style x:Key="ActiveSidebarButtonStyle" TargetType="Button" BasedOn="{StaticResource SidebarButtonStyle}">
+            <Setter Property="Background" Value="#BBDEFB"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="8" 
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#90CAF9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#64B5F6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Card Style -->
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="24"/>
+            <Setter Property="Margin" Value="8"/>
+        </Style>
+
+        <!-- Stat Card Style -->
+        <Style x:Key="StatCardStyle" TargetType="Border" BasedOn="{StaticResource CardStyle}">
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="MinHeight" Value="80"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar -->
+        <Border Grid.Column="0" Background="White" CornerRadius="0,24,24,0" Margin="0,0,12,0">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="5" Color="#CCCCCC"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- User Profile Section -->
+                <Border Grid.Row="0" Background="LinearGradientBrush StartPoint='0,0' EndPoint='1,1' GradientStops='#667EEA,#764BA2'" 
+                        CornerRadius="0,0,24,24" Margin="0,0,0,24" Padding="24,24">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="8" ShadowDepth="3" Color="#AAAAAA"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <!-- User Avatar and Info -->
+                        <Grid Margin="0,0,0,16" HorizontalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Avatar -->
+                            <Border x:Name="AvatarBorder" CornerRadius="25" Width="50" Height="50" 
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Background="White">
+                                <Grid>
+
+                                    <!--cat anh thanh hinh tron-->
+                                    <Image x:Name="AvatarImage" Stretch="UniformToFill" Width="50" Height="50">
+                                        <Image.Clip>
+                                            <EllipseGeometry Center="25,25" RadiusX="25" RadiusY="25"/>
+                                        </Image.Clip>
+                                    </Image>
+
+
+                                    <materialDesign:PackIcon x:Name="DefaultAvatarIcon" Kind="AccountCircle" Width="50" Height="50" 
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+                                </Grid>
+                            </Border>
+
+
+                            <!-- Info -->
+                            <StackPanel Grid.Column="1" Margin="15,0,0,0" VerticalAlignment="Center">
+                                <TextBlock x:Name="UserNameText" Text="Tên người dùng quá dài có thể hiển thị ..." 
+                                           FontSize="16" FontWeight="Bold" Foreground="Black"
+                                           TextTrimming="CharacterEllipsis"/>
+                                <TextBlock x:Name="UserEmailText" Text="email.dai@example.com" FontSize="12" 
+                                           Foreground="Black" Opacity="0.8" TextTrimming="CharacterEllipsis"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Logout Button -->
+                        <Button x:Name="LogoutButton" Style="{StaticResource MaterialDesignFlatButton}"
+                                Background="White" Foreground="Black" Padding="12,8" 
+                                Click="LogoutButton_Click" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Logout" Width="16" Height="16" 
+                                                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Đăng xuất" FontSize="14" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+                <!-- Navigation Menu -->
+                <StackPanel Margin="12,0,12,0" Grid.Row="1">
+                    <!-- Dashboard -->
+                    <Button x:Name="DashboardButton" Style="{StaticResource ActiveSidebarButtonStyle}" 
+                            Click="NavigationButton_Click" Tag="Dashboard">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Grid.Column="0" Kind="ViewDashboard" Width="24" Height="24" 
+                                                    VerticalAlignment="Center" Margin="0,0,20,0" Foreground="Black"/>
+                            <TextBlock Grid.Column="1" Text="Dashboard" VerticalAlignment="Center" FontSize="16" Foreground="Black"/>
+                        </Grid>
+                    </Button>
+
+                    <!-- Thu nhập -->
+                    <Button x:Name="IncomeButton" Style="{StaticResource SidebarButtonStyle}" 
+                            Click="NavigationButton_Click" Tag="Income">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Grid.Column="0" Kind="TrendingUp" Width="24" Height="24" 
+                                                    VerticalAlignment="Center" Margin="0,0,20,0" Foreground="#4CAF50"/>
+                            <TextBlock Grid.Column="1" Text="Thu nhập" VerticalAlignment="Center" FontSize="16"/>
+                        </Grid>
+                    </Button>
+
+                    <!-- Chi tiêu -->
+                    <Button x:Name="ExpenseButton" Style="{StaticResource SidebarButtonStyle}" 
+                            Click="NavigationButton_Click" Tag="Expense">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Grid.Column="0" Kind="TrendingDown" Width="24" Height="24" 
+                                                    VerticalAlignment="Center" Margin="0,0,20,0" Foreground="#F44336"/>
+                            <TextBlock Grid.Column="1" Text="Chi tiêu" VerticalAlignment="Center" FontSize="16"/>
+                        </Grid>
+                    </Button>
+
+                    <!-- Thống kê -->
+                    <Button x:Name="StatisticsButton" Style="{StaticResource SidebarButtonStyle}" 
+                            Click="NavigationButton_Click" Tag="Statistics">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Grid.Column="0" Kind="ChartLine" Width="24" Height="24" 
+                                                    VerticalAlignment="Center" Margin="0,0,20,0" Foreground="#2196F3"/>
+                            <TextBlock Grid.Column="1" Text="Thống kê" VerticalAlignment="Center" FontSize="16"/>
+                        </Grid>
+                    </Button>
+
+                    <!-- Hũ chi tiêu -->
+                    <Button x:Name="BudgetButton" Style="{StaticResource SidebarButtonStyle}" 
+                            Click="NavigationButton_Click" Tag="Budget">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Grid.Column="0" Kind="PiggyBank" Width="24" Height="24" 
+                                                    VerticalAlignment="Center" Margin="0,0,20,0" Foreground="#FF9800"/>
+                            <TextBlock Grid.Column="1" Text="Hũ chi tiêu" VerticalAlignment="Center" FontSize="16"/>
+                        </Grid>
+                    </Button>
+
+                    <!-- Mục tiêu -->
+                    <Button x:Name="GoalsButton" Style="{StaticResource SidebarButtonStyle}" 
+                            Click="NavigationButton_Click" Tag="Goals">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Grid.Column="0" Kind="Target" Width="24" Height="24" 
+                                                    VerticalAlignment="Center" Margin="0,0,20,0" Foreground="#9C27B0"/>
+                            <TextBlock Grid.Column="1" Text="Mục tiêu" VerticalAlignment="Center" FontSize="16"/>
+                        </Grid>
+                    </Button>
+
+                    <!-- Cài đặt -->
+                    <Button x:Name="SettingsButton" Style="{StaticResource SidebarButtonStyle}" 
+                            Click="NavigationButton_Click" Tag="Settings">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <materialDesign:PackIcon Grid.Column="0" Kind="Settings" Width="24" Height="24" 
+                                                    VerticalAlignment="Center" Margin="0,0,20,0" Foreground="#607D8B"/>
+                            <TextBlock Grid.Column="1" Text="Cài đặt" VerticalAlignment="Center" FontSize="16"/>
+                        </Grid>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Content -->
+        <Grid Grid.Column="1" Background="LinearGradientBrush StartPoint='0,0' EndPoint='0,1' GradientStops='#F8F9FA,#E9ECEF'">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0" Background="White" Padding="32,24" CornerRadius="0,0,24,24" Margin="0,0,0,12">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="6" ShadowDepth="2" Color="#DDDDDD"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock x:Name="PageTitle" Text="Dashboard" FontSize="32" FontWeight="Bold" 
+                                   Foreground="{DynamicResource MaterialDesignBody}"/>
+                        
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Button Style="{StaticResource MaterialDesignRaisedButton}" 
+                               Background="{DynamicResource PrimaryHueMidBrush}" 
+                               Foreground="Black" Margin="0,0,12,0" Padding="20,12"
+                               Click="AddIncome_Click" Height="42">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Plus" Width="20" Height="20" 
+                                                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Thu nhập" FontSize="14" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource MaterialDesignRaisedButton}" 
+                               Background="{DynamicResource SecondaryHueMidBrush}" 
+                               Foreground="Black" Padding="20,12"
+                               Click="AddExpense_Click" Height="42">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Minus" Width="20" Height="20" 
+                                                         VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock Text="Chi tiêu" FontSize="14" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Page Content Frame -->
+            <Frame x:Name="MainFrame" Grid.Row="1" NavigationUIVisibility="Hidden" 
+                   Background="Transparent" BorderThickness="0"/>
+        </Grid>
+    </Grid>
+</Window>

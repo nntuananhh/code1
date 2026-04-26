@@ -1,0 +1,111 @@
+<Page x:Class="WpfApp3.Pages.RegisterPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      Title="Đăng ký">
+
+    <!-- Toàn bộ nội dung nằm trong ScrollViewer -->
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Background="#F5F5F5">
+        <StackPanel HorizontalAlignment="Center" Margin="0,40">
+
+            <!-- Header -->
+            <StackPanel HorizontalAlignment="Center" Margin="0,0,0,40">
+                <materialDesign:PackIcon Kind="AccountPlus" 
+                                        Width="80" Height="80" 
+                                        Foreground="#4CAF50"
+                                        HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+                <TextBlock Text="Tạo tài khoản mới" 
+                        FontSize="24" FontWeight="Bold"
+                        Foreground="#333333"
+                        HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+                <TextBlock Text="Đăng ký để bắt đầu quản lý tài chính" 
+                        FontSize="16" 
+                        Foreground="#666666"
+                        HorizontalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Register Form -->
+            <Border 
+                Background="White" 
+                CornerRadius="12" 
+                Padding="40" 
+                MaxWidth="400" 
+                HorizontalAlignment="Center"
+                Margin="20 0 20 20"
+                BorderBrush="#E0E0E0"
+                BorderThickness="1">
+                <StackPanel>
+                    <TextBox x:Name="FullNameTextBox"
+                            materialDesign:HintAssist.Hint="Họ và tên"
+                            materialDesign:HintAssist.IsFloating="True"
+                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                            Margin="0,0,0,20"
+                            FontSize="16"
+                            KeyDown="TextBox_KeyDown"/>
+                    <TextBox x:Name="UsernameTextBox"
+                            materialDesign:HintAssist.Hint="Tên đăng nhập"
+                            materialDesign:HintAssist.IsFloating="True"
+                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                            Margin="0,0,0,20"
+                            FontSize="16"
+                            KeyDown="TextBox_KeyDown"/>
+                    <TextBox x:Name="EmailTextBox"
+                            materialDesign:HintAssist.Hint="Email"
+                            materialDesign:HintAssist.IsFloating="True"
+                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                            Margin="0,0,0,20"
+                            FontSize="16"
+                            KeyDown="TextBox_KeyDown"/>
+                    <PasswordBox x:Name="PasswordBox"
+                                materialDesign:HintAssist.Hint="Mật khẩu"
+                                materialDesign:HintAssist.IsFloating="True"
+                                Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
+                                Margin="0,0,0,20"
+                                FontSize="16"
+                                KeyDown="PasswordBox_KeyDown"/>
+                    <PasswordBox x:Name="ConfirmPasswordBox"
+                                materialDesign:HintAssist.Hint="Xác nhận mật khẩu"
+                                materialDesign:HintAssist.IsFloating="True"
+                                Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
+                                Margin="0,0,0,20"
+                                FontSize="16"
+                                KeyDown="PasswordBox_KeyDown"/>
+                    <Button x:Name="RegisterButton"
+                           Content="ĐĂNG KÝ"
+                           Style="{StaticResource MaterialDesignRaisedButton}"
+                           Background="#4CAF50"
+                           Foreground="White"
+                           FontSize="16" FontWeight="Bold"
+                           Height="45"
+                           Margin="0,0,0,20"
+                           Click="RegisterButton_Click"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="Đã có tài khoản? " 
+                                  VerticalAlignment="Center"
+                                  Foreground="#666666"
+                                  FontSize="14"/>
+                        <Button x:Name="LoginLinkButton"
+                               Content="Đăng nhập"
+                               Style="{StaticResource MaterialDesignFlatButton}"
+                               Foreground="#4CAF50"
+                               FontWeight="Bold"
+                               FontSize="14"
+                               Click="LoginLinkButton_Click"/>
+                    </StackPanel>
+
+                    <TextBlock x:Name="ErrorMessageTextBlock"
+                              Foreground="#F44336"
+                              FontSize="14"
+                              TextWrapping="Wrap"
+                              HorizontalAlignment="Center"
+                              Margin="0,10,0,0"
+                              Visibility="Collapsed"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>
+

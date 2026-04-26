@@ -1,0 +1,223 @@
+<Page x:Class="WpfApp3.Pages.GoalsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      Title="Mục tiêu">
+
+    <Grid Background="#FAFAFA">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="32">
+            <StackPanel>
+                <!-- Header -->
+                
+
+                <!-- Action Buttons -->
+                <Grid Margin="0,0,0,24">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Add Goal Button -->
+                    <Button x:Name="AddGoalButton" Grid.Column="0" Margin="0,0,8,0" 
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Background="#9C27B0" Foreground="White"
+                            Click="AddGoalButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" Width="20" Height="20" 
+                                                   Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Thêm mục tiêu" FontSize="16" FontWeight="Medium"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <!-- Filter Buttons -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Button x:Name="ActiveButton" Content="Đang thực hiện" 
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Click="FilterButton_Click" Tag="Active" Margin="0,0,8,0"/>
+                        <Button x:Name="CompletedButton" Content="Hoàn thành" 
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Click="FilterButton_Click" Tag="Completed" Margin="0,0,8,0"/>
+                        
+                    </StackPanel>
+                </Grid>
+
+                <!-- Summary Cards -->
+                <Grid Margin="0,0,0,32">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Total Goals -->
+                    <Border Grid.Column="0" Background="White" CornerRadius="16" Padding="24" Margin="0,0,12,0">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                                <Border Background="#9C27B0" CornerRadius="12" Width="48" Height="48">
+                                    <materialDesign:PackIcon Kind="Target" Width="24" Height="24" 
+                                                           Foreground="White" HorizontalAlignment="Center" 
+                                                           VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Text="Tổng mục tiêu" FontSize="14" 
+                                             Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+                                    <TextBlock x:Name="TotalGoalsText" Text="0" FontSize="24" FontWeight="Bold" 
+                                             Foreground="{DynamicResource MaterialDesignBody}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Completed Goals -->
+                    <Border Grid.Column="1" Background="White" CornerRadius="16" Padding="24" Margin="6,0">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                                <Border Background="#4CAF50" CornerRadius="12" Width="48" Height="48">
+                                    <materialDesign:PackIcon Kind="CheckCircle" Width="24" Height="24" 
+                                                           Foreground="White" HorizontalAlignment="Center" 
+                                                           VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Text="Đã hoàn thành" FontSize="14" 
+                                             Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+                                    <TextBlock x:Name="CompletedGoalsText" Text="0" FontSize="24" FontWeight="Bold" 
+                                             Foreground="{DynamicResource MaterialDesignBody}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Success Rate -->
+                    <Border Grid.Column="2" Background="White" CornerRadius="16" Padding="24" Margin="12,0,0,0">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                                <Border Background="#FF9800" CornerRadius="12" Width="48" Height="48">
+                                    <materialDesign:PackIcon Kind="TrendingUp" Width="24" Height="24" 
+                                                           Foreground="White" HorizontalAlignment="Center" 
+                                                           VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Text="Tỷ lệ thành công" FontSize="14" 
+                                             Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+                                    <TextBlock x:Name="SuccessRateText" Text="0%" FontSize="24" FontWeight="Bold" 
+                                             Foreground="{DynamicResource MaterialDesignBody}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- Goals List -->
+                <Border Background="White" CornerRadius="16" Padding="24">
+                    <StackPanel>
+                        <TextBlock Text="Danh sách mục tiêu" FontSize="18" FontWeight="Bold" 
+                                 Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,0,24"/>
+                        
+                        <!-- Goals List -->
+                        <ListView x:Name="GoalsListView" Height="500" 
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Tên mục tiêu" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Title}" FontWeight="Bold" 
+                                                             FontSize="14" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Description}" FontSize="12" 
+                                                             Foreground="{DynamicResource MaterialDesignBodyLight}" 
+                                                             TextWrapping="Wrap" MaxWidth="200"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Mục tiêu" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding TargetAmount, StringFormat='₫{0:N0}'}" 
+                                                         Foreground="#9C27B0" FontWeight="Bold"
+                                                         VerticalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Đã tiết kiệm" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding CurrentAmount, StringFormat='₫{0:N0}'}" 
+                                                         Foreground="#4CAF50" FontWeight="Bold"
+                                                         VerticalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Tiến độ" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel>
+                                                    <ProgressBar Value="{Binding ProgressPercentage}" 
+                                                              Maximum="100" Height="8" 
+                                                              Background="#E0E0E0" 
+                                                              Foreground="#4CAF50"/>
+                                                    <TextBlock Text="{Binding ProgressPercentage, StringFormat={}{0:F1}%}" 
+                                                             FontSize="12" HorizontalAlignment="Center" 
+                                                             Margin="0,4,0,0"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Ngày mục tiêu" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding TargetDate, StringFormat='dd/MM/yyyy'}" 
+                                                         VerticalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Trạng thái" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Border Background="{Binding StatusColor}" 
+                                                       CornerRadius="12" Padding="8,4" 
+                                                       HorizontalAlignment="Center">
+                                                    <TextBlock Text="{Binding StatusText}" 
+                                                             Foreground="White" FontSize="12" 
+                                                             FontWeight="Medium"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Thao tác" Width="300">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                            Foreground="#4CAF50"
+                                                            Click="AddMoneyButton_Click" Tag="{Binding Id}"
+                                                            ToolTip="Thêm tiền vào mục tiêu">
+                                                        <materialDesign:PackIcon Kind="Plus" Width="16" Height="16"/>
+                                                    </Button>
+                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                            Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                            Click="EditButton_Click" Tag="{Binding Id}"
+                                                            ToolTip="Chỉnh sửa mục tiêu">
+                                                        <materialDesign:PackIcon Kind="Edit" Width="16" Height="16"/>
+                                                    </Button>
+                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                            Foreground="#F44336"
+                                                            Click="DeleteButton_Click" Tag="{Binding Id}"
+                                                            ToolTip="Xóa mục tiêu">
+                                                        <materialDesign:PackIcon Kind="Delete" Width="16" Height="16"/>
+                                                    </Button>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

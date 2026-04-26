@@ -1,0 +1,302 @@
+<Page x:Class="WpfApp3.Pages.BudgetPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+      Title="Hũ chi tiêu">
+
+    <Grid Background="#FAFAFA">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="32" Grid.ColumnSpan="2">
+            <StackPanel>
+                <!-- Action Buttons -->
+                <Grid Margin="0,0,0,24">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Add Budget Button -->
+                    <Button x:Name="AddBudgetButton" Grid.Column="0" Margin="0,0,8,0" 
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Background="#2196F3" Foreground="White"
+                            Click="AddBudgetButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" Width="20" Height="20" 
+                                                   Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Thêm hũ chi tiêu" FontSize="16" FontWeight="Medium"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Filter Buttons -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Button x:Name="ActiveButton" Content="Đang hoạt động" 
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Click="FilterButton_Click" Tag="Active" Margin="0,0,8,0"/>
+                        <Button x:Name="AllButton" Content="Tất cả" 
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                Click="FilterButton_Click" Tag="All" Margin="0,0,8,0"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Summary Cards -->
+                <Grid Margin="0,0,0,32">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Total Budget -->
+                    <Border Grid.Column="0" Background="White" CornerRadius="16" Padding="24" Margin="0,0,12,0">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                                <Border Background="#2196F3" CornerRadius="12" Width="48" Height="48">
+                                    <materialDesign:PackIcon Kind="AccountBalance" Width="24" Height="24" 
+                                                           Foreground="White" HorizontalAlignment="Center" 
+                                                           VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Text="Tổng ngân sách" FontSize="14" 
+                                             Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+                                    <TextBlock x:Name="TotalBudgetText" Text="₫0" FontSize="24" FontWeight="Bold" 
+                                             Foreground="{DynamicResource MaterialDesignBody}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Total Spent -->
+                    <Border Grid.Column="1" Background="White" CornerRadius="16" Padding="24" Margin="6,0">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                                <Border Background="#F44336" CornerRadius="12" Width="48" Height="48">
+                                    <materialDesign:PackIcon Kind="Shopping" Width="24" Height="24" 
+                                                           Foreground="White" HorizontalAlignment="Center" 
+                                                           VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Text="Đã chi tiêu" FontSize="14" 
+                                             Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+                                    <TextBlock x:Name="TotalSpentText" Text="₫0" FontSize="24" FontWeight="Bold" 
+                                             Foreground="{DynamicResource MaterialDesignBody}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Remaining Budget -->
+                    <Border Grid.Column="2" Background="White" CornerRadius="16" Padding="24" Margin="12,0,0,0">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                                <Border Background="#4CAF50" CornerRadius="12" Width="48" Height="48">
+                                    <materialDesign:PackIcon Kind="PiggyBank" Width="24" Height="24" 
+                                                           Foreground="White" HorizontalAlignment="Center" 
+                                                           VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Text="Còn lại" FontSize="14" 
+                                             Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+                                    <TextBlock x:Name="RemainingBudgetText" Text="₫0" FontSize="24" FontWeight="Bold" 
+                                             Foreground="{DynamicResource MaterialDesignBody}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- Advanced Filter Panel -->
+                <Border x:Name="AdvancedFilterPanel" Background="White" Padding="24" Margin="0,0,0,32" 
+                        Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="Lọc nâng cao" FontSize="18" FontWeight="Bold" 
+                                 Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,0,16"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Category Filter -->
+                            <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                <TextBlock Text="Danh mục" FontSize="14" FontWeight="Medium" Margin="0,0,0,8"/>
+                                <ComboBox x:Name="CategoryFilterComboBox" 
+                                        materialDesign:HintAssist.Hint="Chọn danh mục"
+                                        DisplayMemberPath="Name"
+                                        SelectedValuePath="Id"/>
+                            </StackPanel>
+
+                            <!-- Amount Range -->
+                            <StackPanel Grid.Column="1" Margin="0,0,16,0">
+                                <TextBlock Text="Khoảng số tiền" FontSize="14" FontWeight="Medium" Margin="0,0,0,8"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="MinAmountTextBox" Grid.Column="0" Margin="0,0,8,0"
+                                           materialDesign:HintAssist.Hint="Từ (₫)"
+                                           Text="0"/>
+                                    <TextBox x:Name="MaxAmountTextBox" Grid.Column="1"
+                                           materialDesign:HintAssist.Hint="Đến (₫)"/>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Status Filter -->
+                            <StackPanel Grid.Column="2" Margin="0,0,16,0">
+                                <TextBlock Text="Trạng thái" FontSize="14" FontWeight="Medium" Margin="0,0,0,8"/>
+                                <ComboBox x:Name="StatusFilterComboBox" 
+                                        materialDesign:HintAssist.Hint="Chọn trạng thái">
+                                    <ComboBoxItem Content="Tất cả" Tag="All"/>
+                                    <ComboBoxItem Content="Đang hoạt động" Tag="Active"/>
+                                    <ComboBoxItem Content="Đã hết" Tag="Exhausted"/>
+                                    <ComboBoxItem Content="Sắp hết (>80%)" Tag="NearExhausted"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Filter Actions -->
+                            <StackPanel Grid.Column="3" VerticalAlignment="Bottom">
+                                <Button x:Name="ApplyFilterButton" Content="Áp dụng" 
+                                      Style="{StaticResource MaterialDesignRaisedButton}"
+                                      Background="#2196F3" Foreground="White"
+                                      Click="ApplyAdvancedFilter_Click" Margin="0,0,8,0"/>
+                                <Button x:Name="ClearFilterButton" Content="Xóa bộ lọc" 
+                                      Style="{StaticResource MaterialDesignFlatButton}"
+                                      Click="ClearAdvancedFilter_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Budget Progress Chart -->
+                <Border Background="White"  Padding="24" Margin="0,0,0,32">
+                    <StackPanel>
+                        <TextBlock Text="Tiến độ hũ chi tiêu" FontSize="18" FontWeight="Bold" 
+                                 Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,0,24"/>
+
+                        <lvc:CartesianChart x:Name="BudgetProgressChart" Height="300"
+                                          Series="{Binding BudgetProgressSeries}"
+                                          XAxes="{Binding XAxes}"
+                                          YAxes="{Binding YAxes}">
+                        </lvc:CartesianChart>
+                    </StackPanel>
+                </Border>
+
+                <!-- Budget List -->
+                <Border Padding="24">
+                    <StackPanel>
+                        <TextBlock Text="Danh sách hũ chi tiêu" FontSize="18" FontWeight="Bold" 
+                                 Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,0,24"/>
+
+                        <!-- Budget List -->
+                        <ListView x:Name="BudgetListView" Height="Auto" Width="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                                  SelectionChanged="BudgetListView_SelectionChanged"
+>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Danh mục" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Border Background="{Binding Category.Color}" 
+                                                           CornerRadius="10" Width="20" Height="20" 
+                                                           Margin="0,0,8,0">
+                                                        <materialDesign:PackIcon Kind="Shopping" Width="12" Height="12" 
+                                                                               Foreground="White" HorizontalAlignment="Center" 
+                                                                               VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <TextBlock Text="{Binding Category.Name}" 
+                                                             VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Ngân sách" Width="150">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Amount, StringFormat='₫{0:N0}'}" 
+                                                         Foreground="#2196F3" FontWeight="Bold"
+                                                         VerticalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Đã chi" Width="150">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding SpentAmount, StringFormat='₫{0:N0}'}" 
+                                                         Foreground="#F44336" FontWeight="Bold"
+                                                         VerticalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Còn lại" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding RemainingAmount, StringFormat='₫{0:N0}'}" 
+                                                         Foreground="#4CAF50" FontWeight="Bold"
+                                                         VerticalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Tiến độ" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel>
+                                                    <ProgressBar Value="{Binding ProgressPercentage}" 
+                                                              Maximum="100" Height="8" 
+                                                              Background="#E0E0E0" 
+                                                              Foreground="#4CAF50"/>
+                                                    <TextBlock Text="{Binding ProgressPercentage, StringFormat={}{0:F1}%}" 
+                                                             FontSize="12" HorizontalAlignment="Center" 
+                                                             Margin="0,4,0,0"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Trạng thái" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Border Background="{Binding StatusColor}" 
+                                                       CornerRadius="12" Padding="8,4" 
+                                                       HorizontalAlignment="Center">
+                                                    <TextBlock Text="{Binding StatusText}" 
+                                                             Foreground="White" FontSize="12" 
+                                                             FontWeight="Medium"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Thao tác" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                            Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                            Click="EditButton_Click" Tag="{Binding Id}">
+                                                        <materialDesign:PackIcon Kind="Edit" Width="16" Height="16"/>
+                                                    </Button>
+                                                    <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                            Foreground="#F44336"
+                                                            Click="DeleteButton_Click" Tag="{Binding Id}">
+                                                        <materialDesign:PackIcon Kind="Delete" Width="16" Height="16"/>
+                                                    </Button>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
